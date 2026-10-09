@@ -1,7 +1,6 @@
 # REVIEW.md
 
-Defects found in the starter `app/main.py`. Line numbers refer to the **original starter**. Every fix is covered by a
-test in `tests/test_api.py`.
+Defects found in the starter `app/main.py`. Line numbers refer to the **original starter** (the first commit in this repository).
 
 | # | Where (function / line) | What is wrong | How you'd notice it (test, input, or symptom) | How you fixed it |
 |---|---|---|---|---|

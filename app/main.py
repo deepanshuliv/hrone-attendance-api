@@ -6,7 +6,6 @@ Env:  MONGO_URI, MONGO_DB (required; real environment variables win over a local
 
 Layout: config -> constants -> time rules (R1-R5) -> validation types -> serializers -> indexes
         -> query/pipeline builders (shared with /admin/explain) -> endpoints.
-Specs for every part live in spec/.
 """
 import calendar
 import json
@@ -278,7 +277,7 @@ def record_out(doc: dict) -> dict:
 
 
 # --------------------------------------------------------------------------- #
-# Indexes (see spec/01-foundations.md for what each one serves)
+# Indexes (DECISIONS.md lists what each one serves)
 # --------------------------------------------------------------------------- #
 INDEXES = {
     "employees": [
