@@ -1,21 +1,28 @@
 # Employee Attendance & Analytics API
 
-FastAPI + MongoDB service for the HROne engineering assignment. All application code is in `app/main.py`.
-The review of the starter is in `REVIEW.md` (Part A); design answers are in `DECISIONS.md` (Part C).
+My solution for the HROne assignment, built with FastAPI and MongoDB. All the code is in `app/main.py`.
 
-## Run
+- `REVIEW.md` lists the problems I found in the starter code and how I fixed each one.
+- `DECISIONS.md` answers the five questions.
+
+## How to run
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-export MONGO_URI=mongodb://localhost:27017 MONGO_DB=attendance_db   # or put them in a .env file
+export MONGO_URI=mongodb://localhost:27017 MONGO_DB=attendance_db   # or put these two in a .env file
 uvicorn app.main:app --port 8000
 ```
-MongoDB 6.0+ is required (`$densify`, `$documents` and `$setWindowFields` are used). Indexes are created at startup.
 
-## Things to know
-- `MONGO_URI` and `MONGO_DB` are required; real environment variables win over a `.env` file.
-- Every endpoint in the contract is implemented; nothing is missing.
-- Trend: "range exceeds 92 days" is read as more than 92 rows, so a full 92-day quarter is accepted.
-- `PATCH`: an explicit `null` for `status`, `punch_in` or `punch_out` is a 422 (omit a field to leave it unchanged).
-- Punch-out keeps the stored `late_minutes`; `PATCH` recomputes every derived field.
-- Tested against MongoDB 7.0 with ~100k attendance records: every `/admin/explain` plan uses `IXSCAN`, never `COLLSCAN`.
+## Good to know
+- The app needs `MONGO_URI` and `MONGO_DB`. It reads a `.env` file if there is one, but real environment variables
+  always win.
+- It needs MongoDB 6.0 or newer. I tested it on 7.0.
+- Indexes are created when the app starts, so there's nothing to set up by hand.
+- Everything in the contract is done. Nothing is missing.
+- A few places where I had to make a call:
+  - **Trend:** I read "more than 92 days" as more than 92 days in the range, so a full 92-day quarter is allowed.
+  - **PATCH:** sending `null` for `status`, `punch_in` or `punch_out` gives a 422. To leave a field as it is, just
+    don't send it.
+  - **Punch-out** keeps the late minutes worked out at punch-in. PATCH works out every derived field again.
+- I tested with about 100,000 attendance records. Every `/admin/explain` plan uses an index (`IXSCAN`), and none of
+  them scan the whole collection (`COLLSCAN`).
